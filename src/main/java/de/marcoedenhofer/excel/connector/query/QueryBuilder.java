@@ -1,14 +1,17 @@
 package de.marcoedenhofer.excel.connector.query;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.function.Supplier;
 
+@Getter(AccessLevel.MODULE)
 public class QueryBuilder {
     private final Workbook workbook;
     private Supplier<Sheet> sheetSupplier;
-    private QueryColumnSelector columnSelector;
+    private QueryColumnSelector queryColumnSelector;
 
     private QueryBuilder(Workbook workbook) {
         this.workbook = workbook;
@@ -35,7 +38,7 @@ public class QueryBuilder {
     }
 
     public QueryBuilder select(QueryColumnSelector columnSelector) {
-        this.columnSelector = columnSelector;
+        this.queryColumnSelector = columnSelector;
 
         return this;
     }
@@ -46,9 +49,9 @@ public class QueryBuilder {
      * @return the {@link Query} to execute.
      */
     public Query build() {
-        final Query query = new Query(sheetSupplier, columnSelector);
+        final Query query = new Query(sheetSupplier, queryColumnSelector);
 
-        this.columnSelector = null;
+        this.queryColumnSelector = null;
         this.sheetSupplier = null;
 
         return query;

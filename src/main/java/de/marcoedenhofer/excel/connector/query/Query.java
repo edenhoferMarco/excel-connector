@@ -1,5 +1,7 @@
 package de.marcoedenhofer.excel.connector.query;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -13,6 +15,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Getter(AccessLevel.MODULE)
 public class Query {
     private final List<String> selectedColumns;
     private final Supplier<Sheet> sheetSupplier;
@@ -99,4 +102,6 @@ public class Query {
             default: return "INVALID INPUT";
         }
     }
+
+
 }
