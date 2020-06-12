@@ -7,10 +7,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -57,29 +55,39 @@ public class Query {
 
     private Map<String, Integer> findIndexForSelectedColumns(Sheet sheet) {
         Map<String, Integer> columnNamesToIndexMap = extractColumnNames(sheet);
+        final Predicate<Map.Entry<String, Integer>> isSelectedColumn =
+                entry -> selectedColumns
+                        .stream()
+                        .anyMatch(selectedColName ->
+                                selectedColName.equalsIgnoreCase(entry.getKey()));
 
         // remove all keys, which are of no interest for the client
-        columnNamesToIndexMap.forEach((key, value) -> {
-            if (selectedColumns.stream().noneMatch(name -> name.equalsIgnoreCase(key))) {
-                columnNamesToIndexMap.remove(key);
-            }
-        });
-
-        return columnNamesToIndexMap;
+        return columnNamesToIndexMap.entrySet()
+                .stream()
+                .filter(isSelectedColumn)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private Map<String, Integer> extractColumnNames(Sheet sheet) {
-        Map<String, Integer> columnNamesToIndexMap = new IdentityHashMap<>();
+        Map<String, Integer> columnNamesToIndexMap = new HashMap<>();
 
         Row firstRow = sheet.getRow(sheet.getFirstRowNum());
-        firstRow.cellIterator().forEachRemaining(cell -> {
-            columnNamesToIndexMap.put(cell.getStringCellValue(),cell.getColumnIndex());
-        });
+        if (firstRow != null) {
+            firstRow.cellIterator().forEachRemaining(cell -> {
+                columnNamesToIndexMap.put(cell.getStringCellValue(),cell.getColumnIndex());
+            });
+        } else {
+            log.info("Seems the sheet: {} is not populated", sheet.getSheetName());
+        }
 
         return columnNamesToIndexMap;
     }
 
     private QueryResult buildQueryResult(List<Map<String, String>> results) {
+        if (results.isEmpty()) {
+            log.info("No results found, returning empty QueryResult");
+            return new QueryResult(Collections.emptyList(),Collections.emptyList());
+        }
         return new QueryResult(results.get(0).keySet().stream().collect(Collectors.toUnmodifiableList()),
                 results.subList(1,results.size()));
     }
@@ -102,6 +110,4 @@ public class Query {
             default: return "INVALID INPUT";
         }
     }
-
-
 }

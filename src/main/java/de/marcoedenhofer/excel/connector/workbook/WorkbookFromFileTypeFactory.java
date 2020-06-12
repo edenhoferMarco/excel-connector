@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class WorkbookFromFileTypeFactory implements IWorkbookFactory {
-
     @Override
     public Workbook fromFile(File file) throws UnsupportedFileTypeException, IOException {
         final FileTypes fileType = getFileType(file.getName());
