@@ -11,11 +11,12 @@ pipeline {
             steps {
                 sh 'mvn verify'
             }
-            post {
-                always {
-                    junit '**/surefire-reports/*.xml'
-                    junit '**/failsafe-reports/*.xml'
-                }
+        }
+
+        post {
+            always {
+                junit '**/surefire-reports/*.xml'
+                junit '**/failsafe-reports/*.xml'
             }
         }
     }
