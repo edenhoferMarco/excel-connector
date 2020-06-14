@@ -4,7 +4,7 @@ import de.marcoedenhofer.excel.connector.exceptions.UnsupportedFileTypeException
 import de.marcoedenhofer.excel.connector.query.QueryBuilder;
 import de.marcoedenhofer.excel.connector.query.QueryColumnSelector;
 import de.marcoedenhofer.excel.connector.query.QueryResult;
-import de.marcoedenhofer.excel.connector.utils.TestResourceHelper;
+import de.marcoedenhofer.excel.connector.utils.ResourceHelper;
 import de.marcoedenhofer.excel.connector.utils.ValueTransformationUtils;
 import de.marcoedenhofer.excel.connector.workbook.WorkbookFromFileTypeFactory;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -21,12 +21,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class ExcelConnectorIT {
-    private final TestResourceHelper testResourceHelper = new TestResourceHelper();
+    private final ResourceHelper resourceHelper = new ResourceHelper();
 
     @Test
     public void mapStringToInteger() throws UnsupportedFileTypeException, IOException {
         WorkbookFromFileTypeFactory factory = new WorkbookFromFileTypeFactory();
-        Workbook workbook = factory.fromFile(new File(testResourceHelper.getXlsxTestFilePath()));
+        Workbook workbook = factory.fromFile(new File(resourceHelper.getXlsxTestFilePath()));
 
         QueryResult result = QueryBuilder.forWorkbook(workbook)
                 .fromSheet(2)
@@ -45,7 +45,7 @@ public class ExcelConnectorIT {
     @Test
     public void emptyResult_onSheetWithNoEntries() throws UnsupportedFileTypeException, IOException {
         WorkbookFromFileTypeFactory factory = new WorkbookFromFileTypeFactory();
-        Workbook workbook = factory.fromFile(new File(testResourceHelper.getXlsxTestFilePath()));
+        Workbook workbook = factory.fromFile(new File(resourceHelper.getXlsxTestFilePath()));
 
         QueryResult result = QueryBuilder.forWorkbook(workbook)
                 .fromSheet(0)
@@ -60,7 +60,7 @@ public class ExcelConnectorIT {
     @Test
     public void populatedResult_onSheetWithEntries() throws UnsupportedFileTypeException, IOException {
         WorkbookFromFileTypeFactory factory = new WorkbookFromFileTypeFactory();
-        Workbook workbook = factory.fromFile(new File(testResourceHelper.getXlsxTestFilePath()));
+        Workbook workbook = factory.fromFile(new File(resourceHelper.getXlsxTestFilePath()));
 
         QueryResult result = QueryBuilder.forWorkbook(workbook)
                 .fromSheet(2)
@@ -75,7 +75,7 @@ public class ExcelConnectorIT {
     @Test
     public void onlySelectedColumnsAreReturned() throws UnsupportedFileTypeException, IOException {
         WorkbookFromFileTypeFactory factory = new WorkbookFromFileTypeFactory();
-        Workbook workbook = factory.fromFile(new File(testResourceHelper.getXlsxTestFilePath()));
+        Workbook workbook = factory.fromFile(new File(resourceHelper.getXlsxTestFilePath()));
 
         QueryResult result = QueryBuilder.forWorkbook(workbook)
                 .fromSheet(2)

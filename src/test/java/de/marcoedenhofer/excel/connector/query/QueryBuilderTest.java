@@ -1,6 +1,6 @@
 package de.marcoedenhofer.excel.connector.query;
 
-import de.marcoedenhofer.excel.connector.utils.TestResourceHelper;
+import de.marcoedenhofer.excel.connector.utils.ResourceHelper;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 class QueryBuilderTest {
-    private final TestResourceHelper testResourceHelper = new TestResourceHelper();
+    private final ResourceHelper resourceHelper = new ResourceHelper();
 
     @Test
     void forWorkbook() throws IOException {
-        Workbook expectedWorkbook = new XSSFWorkbook(testResourceHelper.getXlsxTestFilePath());
+        Workbook expectedWorkbook = new XSSFWorkbook(resourceHelper.getXlsxTestFilePath());
         QueryBuilder queryBuilder = QueryBuilder.forWorkbook(expectedWorkbook);
 
         Workbook actualWorkbook = queryBuilder.getWorkbook();
@@ -31,7 +31,7 @@ class QueryBuilderTest {
     @Test
     void fromFirstSheet_loadsExpectedSheet() throws IOException {
         final String expectedSheetName = "Name01";
-        Workbook expectedWorkbook = new XSSFWorkbook(testResourceHelper.getXlsxTestFilePath());
+        Workbook expectedWorkbook = new XSSFWorkbook(resourceHelper.getXlsxTestFilePath());
         QueryBuilder queryBuilder = QueryBuilder.forWorkbook(expectedWorkbook)
                 .fromFirstSheet();
 
@@ -43,7 +43,7 @@ class QueryBuilderTest {
     @Test
     void fromSheet_withNumber_loadsExpectedSheet() throws IOException {
         final String expectedName = "Name01";
-        Workbook expectedWorkbook = new XSSFWorkbook(testResourceHelper.getXlsxTestFilePath());
+        Workbook expectedWorkbook = new XSSFWorkbook(resourceHelper.getXlsxTestFilePath());
         QueryBuilder queryBuilder = QueryBuilder.forWorkbook(expectedWorkbook)
                 .fromSheet(0);
 
@@ -55,7 +55,7 @@ class QueryBuilderTest {
     @Test
     void testFromSheet_withSheetName_loadsExpectedSheet() throws IOException {
         final String expectedName = "PersonalData";
-        Workbook expectedWorkbook = new XSSFWorkbook(testResourceHelper.getXlsxTestFilePath());
+        Workbook expectedWorkbook = new XSSFWorkbook(resourceHelper.getXlsxTestFilePath());
         QueryBuilder queryBuilder = QueryBuilder.forWorkbook(expectedWorkbook)
                 .fromSheet(expectedName);
 
@@ -68,7 +68,7 @@ class QueryBuilderTest {
     void select_buildsCorrectQueryColumnSelector() throws IOException {
         final String firstColumnName = "columnToQuery";
         final String secondColumnName = "secondColumnToQuery";
-        final Workbook expectedWorkbook = new XSSFWorkbook(testResourceHelper.getXlsxTestFilePath());
+        final Workbook expectedWorkbook = new XSSFWorkbook(resourceHelper.getXlsxTestFilePath());
         final QueryColumnSelector expectedColumnSelector = QueryColumnSelector.column(firstColumnName)
                 .and(secondColumnName);
         final QueryBuilder queryBuilder = QueryBuilder.forWorkbook(expectedWorkbook)
@@ -84,7 +84,7 @@ class QueryBuilderTest {
 
     @Test
     void select_withSelectAll_buildsCorrectQueryColumnSelector() throws IOException {
-        final Workbook expectedWorkbook = new XSSFWorkbook(testResourceHelper.getXlsxTestFilePath());
+        final Workbook expectedWorkbook = new XSSFWorkbook(resourceHelper.getXlsxTestFilePath());
         final QueryColumnSelector expectedColumnSelector = QueryColumnSelector.all();
         final QueryBuilder queryBuilder = QueryBuilder.forWorkbook(expectedWorkbook)
                 .select(QueryColumnSelector.all());
@@ -102,7 +102,7 @@ class QueryBuilderTest {
         final String firstColumnName = "columnToQuery";
         final String secondColumnName = "secondColumnToQuery";
         final String expectedSheetName = "Name01";
-        final Workbook expectedWorkbook = new XSSFWorkbook(testResourceHelper.getXlsxTestFilePath());
+        final Workbook expectedWorkbook = new XSSFWorkbook(resourceHelper.getXlsxTestFilePath());
         final QueryColumnSelector expectedColumnSelector = QueryColumnSelector.column(firstColumnName)
                 .and(secondColumnName);
         final QueryBuilder queryBuilder = QueryBuilder.forWorkbook(expectedWorkbook)
